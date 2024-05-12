@@ -23,12 +23,12 @@ export class AuthController {
     authCredentialsDto: AuthCredentialsDto
   ) {
 
-    const user = await this.authService.signIn(authCredentialsDto);
+    const jwtAccessToken = await this.authService.signIn(authCredentialsDto);
 
-    if (!user) {
+    if (!jwtAccessToken) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return user;
+    return jwtAccessToken;
   }
 }
