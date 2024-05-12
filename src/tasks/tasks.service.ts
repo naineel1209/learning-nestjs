@@ -3,6 +3,8 @@ import { TasksRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTaskDTO } from './dto/create-tasks.dto';
 import { TaskStatus } from './tasks-status.enum';
+import { UpdateTaskDTO } from './dto/update-task.dto';
+import { GetTasksFilterDTO } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksService {
@@ -12,62 +14,23 @@ export class TasksService {
     private readonly tasksRepository: TasksRepository
   ) { }
 
-  // getAllTasks(getTasksFilterDto: GetTasksFilterDTO) {
-  //   if (Object.keys(getTasksFilterDto).length > 0) {
-  //     const { status, search } = getTasksFilterDto;
-
-  //     let tasks = this.tasks;
-
-  //     if (status) {
-  //       tasks = tasks.filter(task => task.status === status);
-  //     }
-
-  //     if (search) {
-  //       tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
-  //     }
-
-  //     return tasks;
-  //   }
-
-  //   return this.tasks;
-  // }
+  async getAllTasks(getTasksFilterDto: GetTasksFilterDTO) {
+    return await this.tasksRepository.getAllTasks(getTasksFilterDto);
+  }
 
   async getTaskById(id: string) {
-    const found = await this.tasksRepository.findOne({
-      where: { id: id }
-    });
-
-    if (!found) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
-    }
-
-    return found;
+    return await this.tasksRepository.getTaskById(id);
   }
 
   async createTask(createTaskDto: CreateTaskDTO) {
-
     return await this.tasksRepository.createTask(createTaskDto);
   }
 
-  // updateTask(id: string, updateTaskDto: UpdateTaskDTO) {
-  //   const task = this.getTaskById(id);
+  async updateTask(id: string, updateTaskDto: UpdateTaskDTO) {
+    return await this.tasksRepository.updateTask(id, updateTaskDto);
+  }
 
-  //   if (task) {
-  //     const { title, description, status } = updateTaskDto;
-
-  //     task.title = title || task.title;
-  //     task.description = description || task.description;
-  //     task.status = status || task.status;
-  //   }
-
-  //   return task;
-  // }
-
-  // deleteTask(id: string) {
-  //   const task = this.getTaskById(id);
-
-  //   this.tasks = this.tasks.filter(task => task.id !== id);
-
-  //   return task;
-  // }
+  async deleteTask(id: string) {
+    return await this.tasksRepository.deleteTask(id);
+  }
 }
